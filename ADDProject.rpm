@@ -66,6 +66,10 @@
         </list>
         <parameter key="keep_both_join_attributes" value="false"/>
       </operator>
+      <operator activated="true" class="execute_script" compatibility="8.1.003" expanded="true" height="82" name="Execute Script" width="90" x="246" y="289">
+        <parameter key="script" value="/* &#10; * You can use both Java and Groovy syntax in this script.&#10; * &#10; * Note that you have access to the following two predefined variables:&#10; * 1) input (an array of all input data)&#10; * 2) operator (the operator instance which is running this script)&#10; */&#10;&#10;// Take first input data and treat it as generic IOObject&#10;// Alternatively, you could treat it as an ExampleSet if it is one:&#10; ExampleSet inputData = input[0];&#10;//IOObject inputData = input[0];&#10;&#10;Map&lt;int, List&lt;String&gt;&gt; output = new HashMap&lt;int, List&lt;String&gt;&gt;();&#10;&#10;ExampleSet inputExampleSet = input[0];&#10;&#10;Attributes inputAttributes = inputExampleSet.getAttributes();&#10;Attribute tagAttibute = inputAttributes.get(&quot;tag&quot;);&#10;Attribute movieIdAttibute = inputAttributes.get(&quot;movieId&quot;);&#10;&#10;for (Example actExample : inputExampleSet) {&#10;&#9;String tagValue = actExample.getNominalValue(tagAttibute);&#10;&#9;String movieIdValue = actExample.getNominalValue(movieIdAttibute);&#10;&#10;&#9;if(output.containsKey(movieIdValue){&#10;&#9;&#9;List tagList = new ArrayList();&#10;&#9;&#9;tagList.add(tagValue)&#10;&#9;&#9;output.put(movieIdValue, tagList)&#10;&#9;}else{&#10;&#9;&#9;output.get(movieIdValue).add(tagValue)&#10;&#9;}&#10;}&#10;&#10;&#10;// This line returns the first input as the first output&#10;return output;"/>
+        <parameter key="standard_imports" value="true"/>
+      </operator>
       <operator activated="true" class="concurrency:join" compatibility="8.1.003" expanded="true" height="82" name="Join (2)" width="90" x="447" y="238">
         <parameter key="remove_double_attributes" value="true"/>
         <parameter key="join_type" value="inner"/>
@@ -80,8 +84,9 @@
       <connect from_op="Split" from_port="example set output" to_op="Select Attributes" to_port="example set input"/>
       <connect from_op="Select Attributes" from_port="example set output" to_op="Join" to_port="left"/>
       <connect from_op="Retrieve project_ratings" from_port="output" to_op="Join" to_port="right"/>
-      <connect from_op="Retrieve project_tags" from_port="output" to_op="Join (2)" to_port="right"/>
+      <connect from_op="Retrieve project_tags" from_port="output" to_op="Execute Script" to_port="input 1"/>
       <connect from_op="Join" from_port="join" to_op="Join (2)" to_port="left"/>
+      <connect from_op="Execute Script" from_port="output 1" to_op="Join (2)" to_port="right"/>
       <connect from_op="Join (2)" from_port="join" to_port="result 1"/>
       <portSpacing port="source_input 1" spacing="0"/>
       <portSpacing port="sink_result 1" spacing="0"/>
