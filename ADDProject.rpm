@@ -154,7 +154,7 @@
         <parameter key="invert_selection" value="false"/>
         <parameter key="include_special_attributes" value="false"/>
       </operator>
-      <operator activated="true" breakpoints="after" class="set_role" compatibility="8.1.003" expanded="true" height="82" name="Set Role" width="90" x="983" y="136">
+      <operator activated="true" class="set_role" compatibility="8.1.003" expanded="true" height="82" name="Set Role" width="90" x="983" y="136">
         <parameter key="attribute_name" value="rating"/>
         <parameter key="target_role" value="label"/>
         <list key="set_additional_roles"/>
